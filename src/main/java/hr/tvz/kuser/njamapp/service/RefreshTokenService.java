@@ -53,4 +53,12 @@ public class RefreshTokenService {
         }
         return token;
     }
+
+    public void deleteByUsername(String username) {
+        UserInfo userInfo = userInfoRepository.findByUsername(username);
+        if (userInfo != null) {
+            refreshTokenRepository.findByUserInfo(userInfo)
+                    .ifPresent(refreshTokenRepository::delete);
+        }
+    }
 }
