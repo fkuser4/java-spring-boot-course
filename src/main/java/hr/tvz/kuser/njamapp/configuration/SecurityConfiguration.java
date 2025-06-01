@@ -35,12 +35,17 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refreshToken").permitAll()
+                        .requestMatchers("/api/v1/auth/logout").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurants/{restaurantId}/reviews/{reviewId}").hasRole("ADMIN")
                         .requestMatchers("/api/v1/restaurants/{restaurantId}/reviews/**").authenticated()
-                        .requestMatchers("/api/v1/restaurants/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurants/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/restaurants/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/restaurants/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurants/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/users/**").authenticated()
                         .requestMatchers("/api/v1/bugtracking/**").authenticated()
-                        .requestMatchers("/bugtracking/**").authenticated())
+                        .requestMatchers("/bugtracking/**").authenticated()
+                )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

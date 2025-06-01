@@ -30,13 +30,13 @@ public class RefreshTokenService {
         if (existingTokenOpt.isPresent()) {
             RefreshToken refreshToken = existingTokenOpt.get();
             refreshToken.setToken(UUID.randomUUID().toString());
-            refreshToken.setExpiryDate(Instant.now().plusMillis(600000L));
+            refreshToken.setExpiryDate(Instant.now().plusMillis(90000L));
             return refreshTokenRepository.save(refreshToken);
         } else {
             RefreshToken refreshToken = RefreshToken.builder()
                     .userInfo(userInfo)
                     .token(UUID.randomUUID().toString())
-                    .expiryDate(Instant.now().plusMillis(600000L))
+                    .expiryDate(Instant.now().plusMillis(90000L))
                     .build();
             return refreshTokenRepository.save(refreshToken);
         }

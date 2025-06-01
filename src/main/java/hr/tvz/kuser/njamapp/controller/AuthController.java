@@ -50,7 +50,7 @@ public class AuthController {
                     return JwtResponseDTO.builder()
                             .accessToken(accessToken)
                             .token(refreshTokenRequestDTO.getToken()).build();
-                }).orElseThrow(() ->new RuntimeException("Refresh Token is not in DB..!!"));
+                }).orElseThrow(() -> new RuntimeException("Refresh Token is not in DB..!!"));
     }
 
     @PostMapping("/logout")

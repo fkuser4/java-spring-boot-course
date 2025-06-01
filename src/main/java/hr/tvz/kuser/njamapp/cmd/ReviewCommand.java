@@ -1,9 +1,13 @@
 package hr.tvz.kuser.njamapp.cmd;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewCommand {
 
     @NotBlank(message = "Title is required")
