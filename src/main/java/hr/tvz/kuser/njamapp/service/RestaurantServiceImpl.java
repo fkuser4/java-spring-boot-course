@@ -53,6 +53,13 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public List<RestaurantDTO> findCurrentlyOpenRestaurants() {
+        return restaurantRepository.findByIsOpenTrue().stream()
+                .map(RestaurantMapper::toDTO)
+                .toList();
+    }
+
+    @Override
     public boolean save(RestaurantCommand restaurantCommand) {
         if (restaurantRepository.existsByNameAndAddress(restaurantCommand.getName(), restaurantCommand.getAddress())) {
             return false;

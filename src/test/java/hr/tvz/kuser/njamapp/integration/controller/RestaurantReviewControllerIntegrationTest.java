@@ -37,6 +37,8 @@ public class RestaurantReviewControllerIntegrationTest {
     void setUp() {
         when(jwtService.validateToken(eq("token"), any())).thenReturn(true);
         when(jwtService.extractUsername(eq("token"))).thenReturn("user");
+        when(jwtService.validateToken(eq("tokenAdmin"), any())).thenReturn(true);
+        when(jwtService.extractUsername(eq("tokenAdmin"))).thenReturn("admin");
     }
 
     @Test
@@ -84,5 +86,25 @@ public class RestaurantReviewControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testDeleteReview_success() throws Exception {
+        mockMvc.perform(delete("/api/v1/restaurants/{restaurantId}/reviews/{reviewId}", 1, 1)
+                        .header("Authorization", "Bearer tokenAdmin"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void testDeleteReview_notFound() throws Exception {
+        mockMvc.perform(delete("/api/v1/restaurants/{restaurantId}/reviews/{reviewId}", 1, 999)
+                        .header("Authorization", "Bearer tokenAdmin"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDeleteReview_unauthorized() throws Exception {
+        mockMvc.perform(delete("/api/v1/restaurants/{restaurantId}/reviews/{reviewId}", 1, 1))
+                .andExpect(status().isForbidden());
     }
 }

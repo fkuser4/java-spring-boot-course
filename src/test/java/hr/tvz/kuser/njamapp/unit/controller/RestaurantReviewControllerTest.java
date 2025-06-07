@@ -83,4 +83,24 @@ class RestaurantReviewControllerTest {
 
         verify(reviewService, never()).save(any(), any());
     }
+
+    @Test
+    void deleteReview_success() throws Exception {
+        when(reviewService.deleteById(1L)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/v1/restaurants/{restaurantId}/reviews/{reviewId}", 1L, 1L))
+                .andExpect(status().isNoContent());
+
+        verify(reviewService).deleteById(1L);
+    }
+
+    @Test
+    void deleteReview_notFound() throws Exception {
+        when(reviewService.deleteById(1L)).thenReturn(false);
+
+        mockMvc.perform(delete("/api/v1/restaurants/{restaurantId}/reviews/{reviewId}", 1L, 1L))
+                .andExpect(status().isNotFound());
+
+        verify(reviewService).deleteById(1L);
+    }
 }
